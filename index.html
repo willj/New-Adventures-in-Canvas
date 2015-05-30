@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style type="text/css">
+			
+			canvas{
+				border:1px dashed #333333;
+			}
+			
+		</style>
+		<script src="game.js"></script>
+		<script>
+			var settings = {
+				canvasWidth: 1200,
+				canvasHeight: 720,
+				framesPerSecond: 30
+			};
+			
+			var game;
+			
+			window.onload = function(){
+				game = new Game(document.getElementById("body"), settings, function(){
+					game.startGame();
+				});	
+			};
+			
+		</script>
+	</head>
+	
+	<body id="body">
+	</body>
+</html>
