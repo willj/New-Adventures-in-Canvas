@@ -21,3 +21,17 @@ assetMap.push({
 			}
 		]
 });
+
+assetMap.push({
+	fileName: "pidge.png",
+	sprites: [
+		{
+			name: "pidge",
+			startX: 0,
+			startY: 0,
+			width: 150,
+			height: 148,
+			frames: 1
+		}
+	]
+});

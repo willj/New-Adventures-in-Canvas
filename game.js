@@ -52,13 +52,18 @@
 			//console.log(this.approxRunTimeInSeconds % 3);
 		}
 
+		for (var i = 0; i < this.actors.length; i++) {
+			this.actors[i].update();
+		}
+
 		var x = Math.extensions.getRandomInt(0,this.settings.canvasWidth);
 		var y = Math.extensions.getRandomInt(0,this.settings.canvasHeight);
 		
 		if (x % 2 === 0){
 			this.actors.push(new Actor(this.sprites["redCircle"], x, y));
 		} else {
-			this.actors.push(new Actor(this.sprites["yellowCircle"], x, y));	
+			//this.actors.push(new Actor(this.sprites["yellowCircle"], x, y));	
+			this.actors.push(new Actor(this.sprites["pidge"], x, y));
 		}
 		
 		//console.log(this.frameCount);	
