@@ -10,21 +10,24 @@
 		</style>
 		<script src="sprite.js"></script>
 		<script src="actor.js"></script>
+		<script src="assetMap.js"></script>
 		<script src="math.extensions.js"></script>
 		<script src="game.js"></script>
 		<script>
+						
 			var settings = {
 				canvasWidth: 1200,
 				canvasHeight: 720,
-				framesPerSecond: 30
+				framesPerSecond: 30,
+				assetMap: assetMap
 			};
 			
 			var game;
-			
-			window.onload = function(){
+						
+			window.onload = function(){				
 				game = new Game(document.getElementById("body"), settings, function(){
-					game.startGame();
-				});	
+					this.startGame();
+				});
 			};
 			
 		</script>

@@ -2,6 +2,7 @@
 	/// <reference path="sprite.js" />
 	/// <reference path="actor.js" />
 	/// <reference path="math.extensions.js" />
+	/// <reference path="assetMap.js" />
 	
 	function Game(container, settings, readyCallback){			
 		var self = this;	
@@ -10,6 +11,8 @@
 		
 		this.gameLoopIntervalId;
 		this.actors = [];
+		this.images = {};
+		this.imagesLoaded = 0;
 		this.sprites = {};
 		
 		this.canvas = document.createElement("canvas");
@@ -51,8 +54,13 @@
 
 		var x = Math.extensions.getRandomInt(0,this.settings.canvasWidth);
 		var y = Math.extensions.getRandomInt(0,this.settings.canvasHeight);
-		this.actors.push(new Actor(this.sprites["circle"], x, y));
-
+		
+		if (x % 2 === 0){
+			this.actors.push(new Actor(this.sprites["redCircle"], x, y));
+		} else {
+			this.actors.push(new Actor(this.sprites["yellowCircle"], x, y));	
+		}
+		
 		//console.log(this.frameCount);	
 	};
 	
@@ -66,15 +74,28 @@
 	};
 	
 	Game.prototype.loadAssets = function(){
-		var self = this;
-		this.image = new Image();
+
+		for (var i = 0; i < this.settings.assetMap.length; i++){
+			var newImage = new Image();
+			this.images[this.settings.assetMap[i].fileName] = newImage;
+			
+			newImage.onload = this.assetLoaded(this.settings.assetMap[i]);
+			
+			newImage.src = this.settings.assetMap[i].fileName;	
+		}
+	};
+	
+	Game.prototype.assetLoaded = function(asset){
+		this.imagesLoaded += 1;
+
+		for (var i = 0; i < asset.sprites.length; i++){
+			var spr = asset.sprites[i];
+			this.sprites[spr.name] = new Sprite(this.images[asset.fileName], spr.startX, spr.startY, spr.width, spr.height);	
+		}
 		
-		this.image.onload = function(){		
-			self.sprites["circle"] = new Sprite(self.image);		
-			self.readyCallback.apply(this, []);	
-		};
-		
-		this.image.src = "circle.png";
+		if (this.imagesLoaded == this.settings.assetMap.length){
+			this.readyCallback.apply(this, []);	
+		}
 	};
 	
 	Game.prototype.frameCounter = function(){
