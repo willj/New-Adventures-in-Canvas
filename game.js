@@ -86,7 +86,7 @@
 			
 			newImage.onload = this.assetLoaded(this.settings.assetMap[i]);
 			
-			newImage.src = this.settings.assetMap[i].fileName;	
+			newImage.src = this.settings.assetDirectory + this.settings.assetMap[i].fileName;	
 		}
 	};
 	
