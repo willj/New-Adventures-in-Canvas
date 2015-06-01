@@ -16,9 +16,10 @@ Actor.prototype.draw = function(context){
 	// so if we need to flip, change alpha etc.
 	// probably more efficient to flip by creating a different image though
 	// so have a hasEffects or applyFilters flag and wrap a check around it.
+	/*
 	context.save();
 	context.globalAlpha = this.alpha;
-	
+	*/
 	
 	// object.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
 	context.drawImage(
@@ -32,5 +33,5 @@ Actor.prototype.draw = function(context){
 			this.sprite.width,
 			this.sprite.height);
 	
-	context.restore();
+	//context.restore();
 };

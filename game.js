@@ -11,6 +11,7 @@
 		
 		this.gameLoopIntervalId;
 		this.actors = [];
+		this.newActorWeighting = 0.0;
 		this.images = {};
 		this.imagesLoaded = 0;
 		this.sprites = {};
@@ -19,7 +20,7 @@
 		this.context = this.canvas.getContext("2d");
 		this.frameCount = 0;
 		this.approxRunTimeInSeconds = 0;
-		this.lastSecond = 0;
+		//this.lastSecond = 0;
 																				
 		// this.canvas.width = container.clientWidth;
 		// this.canvas.height = container.clientHeight;								
@@ -46,27 +47,14 @@
 	
 	Game.prototype.update = function update(){
 		this.frameCounter();
+		this.updateOncePerSecond();
 		
-		if (this.lastSecond !== this.approxRunTimeInSeconds){
-			this.lastSecond += 1;
-			//console.log(this.approxRunTimeInSeconds % 3);
-		}
-
 		for (var i = 0; i < this.actors.length; i++) {
 			this.actors[i].update();
 		}
 
-		var x = Math.extensions.getRandomInt(0,this.settings.canvasWidth);
-		var y = Math.extensions.getRandomInt(0,this.settings.canvasHeight);
-		
-		if (x % 2 === 0){
-			this.actors.push(new Actor(this.sprites["redCircle"], x, y));
-		} else {
-			//this.actors.push(new Actor(this.sprites["yellowCircle"], x, y));	
-			this.actors.push(new Actor(this.sprites["pidge"], x, y));
-		}
-		
-		//console.log(this.frameCount);	
+		this.generateNewActors();
+	
 	};
 	
 	Game.prototype.draw = function (){
@@ -75,7 +63,22 @@
 		for (var i = 0; i < this.actors.length; i++){
 			this.actors[i].draw(this.context);
 		}
+	};
+	
+	Game.prototype.updateOncePerSecond = function(){
+		if (this.frameCount !== 0){
+			return;
+		}
 		
+		this.approxRunTimeInSeconds += 1;
+		/*
+		if (this.lastSecond !== this.approxRunTimeInSeconds){
+			this.lastSecond += 1;
+		}
+		*/
+		
+		// Update newActorWeighting so we get new actors appear quicker the later in the game we are.
+		this.newActorWeighting = (Math.floor(this.approxRunTimeInSeconds / 10) * 0.1) + 0.1;
 	};
 	
 	Game.prototype.loadAssets = function(){
@@ -106,8 +109,20 @@
 	Game.prototype.frameCounter = function(){
 		// keep a count of frames in this second and total runtime seconds so we can do things at a slower pace than fps
 		this.frameCount = (this.frameCount + 1) % this.settings.framesPerSecond;
+	};
+	
+	Game.prototype.generateNewActors = function(){
+		if (this.frameCount % 4 === 0){
+			if (Math.random() < this.newActorWeighting){
+				var x = Math.extensions.getRandomInt(0,this.settings.canvasWidth);
+				var y = Math.extensions.getRandomInt(0,this.settings.canvasHeight);
 				
-		if (this.frameCount === 0){
-			this.approxRunTimeInSeconds += 1;
+				if (x % 2 === 0){
+					this.actors.push(new Actor(this.sprites["redCircle"], x, y));
+				} else {
+					this.actors.push(new Actor(this.sprites["yellowCircle"], x, y));	
+					//this.actors.push(new Actor(this.sprites["pidge"], x, y));
+				}			
+			}
 		}	
 	};
