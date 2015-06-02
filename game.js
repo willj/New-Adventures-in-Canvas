@@ -28,6 +28,11 @@
 		this.canvas.height = this.settings.canvasHeight;
 		
 		container.appendChild(this.canvas);
+				
+		this.canvas.addEventListener("click", function (e){
+			// wrap in anon func so "this" points to Game and not the canvas element
+			self.onMouseClick(e);
+		});
 		
 		this.loadAssets();
 	}			
@@ -125,4 +130,31 @@
 				}			
 			}
 		}	
+	};
+	
+	Game.prototype.onMouseClick = function(e){
+				
+		// event doesn't give us coords within our canvas element but within the visible viewport
+		// so we need to offset the canvas position 
+		var canvasRect = this.canvas.getBoundingClientRect();
+		var mouseX = e.clientX - canvasRect.left;
+		var mouseY = e.clientY - canvasRect.top;
+		
+		console.log("click: " + mouseX + " " + mouseY);		
+		
+		for (var i = 0; i < this.actors.length; i++){
+			if (this.detectClickCollision(mouseX, mouseY, this.actors[i])){
+				console.log("kaboom!");
+			}
+		}
+	};
+	
+	Game.prototype.detectClickCollision = function(mouseX, mouseY, actor){		
+		if (mouseX >= actor.posX && mouseX <= (actor.posX + actor.sprite.width)){
+			if (mouseY >= actor.posY && mouseY <= actor.posY + actor.sprite.height){
+				return true;
+			}
+		}
+		
+		return false;
 	};
