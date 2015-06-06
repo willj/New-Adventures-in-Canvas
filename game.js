@@ -20,10 +20,7 @@
 		this.context = this.canvas.getContext("2d");
 		this.frameCount = 0;
 		this.approxRunTimeInSeconds = 0;
-		//this.lastSecond = 0;
-																				
-		// this.canvas.width = container.clientWidth;
-		// this.canvas.height = container.clientHeight;								
+					
 		this.canvas.width = this.settings.canvasWidth;
 		this.canvas.height = this.settings.canvasHeight;
 		
@@ -54,12 +51,20 @@
 		this.frameCounter();
 		this.updateOncePerSecond();
 		
+		var actorsToKill = [];
+		
 		for (var i = 0; i < this.actors.length; i++) {
 			this.actors[i].update();
+			if (this.actors[i].killed){
+				actorsToKill.push(i);
+			}
+		}
+
+		for (var i = 0; i < actorsToKill.length; i++){
+			this.actors.splice(actorsToKill[i], 1);
 		}
 
 		this.generateNewActors();
-	
 	};
 	
 	Game.prototype.draw = function (){
@@ -76,14 +81,8 @@
 		}
 		
 		this.approxRunTimeInSeconds += 1;
-		/*
-		if (this.lastSecond !== this.approxRunTimeInSeconds){
-			this.lastSecond += 1;
-		}
-		*/
 		
-		// Update newActorWeighting so we get new actors appear quicker the later in the game we are.
-		this.newActorWeighting = (Math.floor(this.approxRunTimeInSeconds / 10) * 0.1) + 0.1;
+		this.increaseNewActorWeighting();
 	};
 	
 	Game.prototype.loadAssets = function(){
@@ -116,6 +115,11 @@
 		this.frameCount = (this.frameCount + 1) % this.settings.framesPerSecond;
 	};
 	
+	Game.prototype.increaseNewActorWeighting = function(){
+		// increase newActorWeighting so we get new actors appear quicker the later in the game we are.
+		this.newActorWeighting = (Math.floor(this.approxRunTimeInSeconds / 10) * 0.1) + 0.1;
+	};
+	
 	Game.prototype.generateNewActors = function(){
 		if (this.frameCount % 4 === 0){
 			if (Math.random() < this.newActorWeighting){
@@ -139,12 +143,10 @@
 		var canvasRect = this.canvas.getBoundingClientRect();
 		var mouseX = e.clientX - canvasRect.left;
 		var mouseY = e.clientY - canvasRect.top;
-		
-		console.log("click: " + mouseX + " " + mouseY);		
-		
+				
 		for (var i = 0; i < this.actors.length; i++){
 			if (this.detectClickCollision(mouseX, mouseY, this.actors[i])){
-				console.log("kaboom!");
+				this.actors[i].clicked();
 			}
 		}
 	};

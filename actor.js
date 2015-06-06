@@ -5,7 +5,12 @@ function Actor(sprite, posX, posY){
 	this.posX = posX || 0;
 	this.posY = posY || 0;
 	this.alpha = 1.0;
+	this.killed = false;
 }
+
+Actor.prototype.clicked = function(){
+	this.killed = true;	
+};
 
 Actor.prototype.update = function(){
 	//this.alpha = Math.random();
