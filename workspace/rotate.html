@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style type="text/css">
+			
+			canvas{
+				position: relative;
+				border:1px dashed #333333;
+			}
+			
+		</style>
+		
+		<script>
+			
+			window.onload = rotate;
+			
+			function rotate(){
+				var body = document.getElementById("body");
+				var canvas = document.createElement("canvas");
+				canvas.height = 500;
+				canvas.width = 500;
+				var context = canvas.getContext("2d");
+					
+				body.appendChild(canvas);
+					
+				var image = new Image();
+				
+				image.onload = function(){
+					context.save();
+					
+					// where we want to draw the image
+					var drawX = 250; //175;
+					var drawY = 50; //176;
+					
+					// translate the canvas by drawX/Y to make 0,0 be the top left of our image
+					// then a further 0.5 * image w/h to make it in the centre of our image			
+					var x = drawX + (0.5 * image.width);
+					var y = drawY + (0.5 * image.height);
+					context.translate(x,y);	
+					
+					context.rotate((Math.PI/180) * 180);
+					
+					// after rotating, we need to translate back, so we can draw at our original coords
+					context.translate(-x,-y);
+					
+					context.drawImage(image,drawX,drawY);
+					
+					context.restore();
+					
+					// right way up
+					context.drawImage(image,0,0);
+				};
+				
+				image.src = "../assets/pidge.png";
+			}
+
+		</script>
+		
+	</head>
+	
+	<body id="body">
+			
+	</body>
+</html>
