@@ -1,7 +1,7 @@
 var assetMap = [];
 
 assetMap.push({
-	fileName: "doublecircle.png",
+	fileName: "doublecircle2.png",
 	sprites: [
 			{
 				name: "yellowCircle",
@@ -9,7 +9,10 @@ assetMap.push({
 				startY: 0,
 				width: 50,
 				height: 50,
-				frames: 1
+				states: {
+					initial: [0,"initial"],
+					flash: [1,0,1,0,"initial"]
+				}
 			},
 			{
 				name: "redCircle",
@@ -17,7 +20,10 @@ assetMap.push({
 				startY: 50,
 				width: 50,
 				height: 50,
-				frames: 1
+				states: {
+					initial: [0,"initial"],
+					flashAndDie: [1,0,1,0,1,0,1,0,"die"]
+				}
 			}
 		]
 });
@@ -30,8 +36,7 @@ assetMap.push({
 			startX: 0,
 			startY: 0,
 			width: 150,
-			height: 148,
-			frames: 1
+			height: 148
 		}
 	]
 });

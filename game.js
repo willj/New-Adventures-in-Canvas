@@ -102,7 +102,7 @@
 
 		for (var i = 0; i < asset.sprites.length; i++){
 			var spr = asset.sprites[i];
-			this.sprites[spr.name] = new Sprite(this.images[asset.fileName], spr.startX, spr.startY, spr.width, spr.height);	
+			this.sprites[spr.name] = new Sprite(this.images[asset.fileName], spr.startX, spr.startY, spr.width, spr.height, spr.states);	
 		}
 		
 		if (this.imagesLoaded == this.settings.assetMap.length){
@@ -117,6 +117,9 @@
 	
 	Game.prototype.increaseNewActorWeighting = function(){
 		// increase newActorWeighting so we get new actors appear quicker the later in the game we are.
+		
+		// we'd probably want to do this based on score if we had one
+		
 		this.newActorWeighting = (Math.floor(this.approxRunTimeInSeconds / 10) * 0.1) + 0.1;
 	};
 	
@@ -127,10 +130,9 @@
 				var y = Math.extensions.getRandomInt(0,this.settings.canvasHeight);
 				
 				if (x % 2 === 0){
-					this.actors.push(new Actor(this.sprites["redCircle"], x, y));
+					this.actors.push(new Actor("red", this.sprites["redCircle"], x, y));
 				} else {
-					this.actors.push(new Actor(this.sprites["yellowCircle"], x, y));	
-					//this.actors.push(new Actor(this.sprites["pidge"], x, y));
+					this.actors.push(new Actor("yellow", this.sprites["yellowCircle"], x, y));	
 				}			
 			}
 		}	
@@ -146,7 +148,12 @@
 				
 		for (var i = 0; i < this.actors.length; i++){
 			if (this.detectClickCollision(mouseX, mouseY, this.actors[i])){
-				this.actors[i].clicked();
+				//this.actors[i].clicked();
+				if (this.actors[i].name === "yellow"){
+					this.actors[i].setState("flash");	
+				} else {
+					this.actors[i].setState("flashAndDie");
+				}
 			}
 		}
 	};
