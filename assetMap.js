@@ -1,3 +1,9 @@
+/*	Assumes each sprite sheet is ordered vertically in the image, with animation states horizontally in the same row
+ *	Each state within a sheet should be the same size
+ *	But each row could be a different size
+ *	Could possibly do with adding a hit area width/height
+ */
+
 var assetMap = [];
 
 assetMap.push({
